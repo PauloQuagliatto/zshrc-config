@@ -99,16 +99,49 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-# 
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-export PATH=$HOME/.local/bin:$HOME/.cargo/bin:$PATH
+source "$HOME/.cargo/env"
 export PATH=$HOME/.local/bin:$HOME/go/bin:$PATH
+export PATH=$HOME/.local/bin:$HOME/zig/bin:$PATH
 
 alias ls="exa --icons"
 alias bat="bat --style=auto"
 
 alias n="nvim"
 
+pm() {
+    if [ -f yarn.lock ]; then
+        yarn "$@"
+    elif [ -f pnpm-lock.yaml ]; then
+        pnpm "$@"
+    elif [ -f package-lock.json ]; then
+        npm "$@"
+    elif [ -f pnpm-lock.yaml ]; then
+        pnpm "$@"
+    fi
+}
+
+dpm() {
+    if [ -f yarn.lock ]; then
+        doppler run -- yarn "$@"
+    elif [ -f pnpm-lock.yaml ]; then
+        doppler run -- pnpm "$@"
+    elif [ -f package-lock.json ]; then
+        doppler run -- npm "$@"
+    elif [ -f pnpm-lock.yaml ]; then
+        doppler run -- pnpm "$@"
+    fi
+}
+
+codes () {
+    selected=$(find ~/works  -mindepth 1 -maxdepth 1 -type d | fzf)
+    cd $selected
+}
+
+studies () {
+    selected=$(find ~/studies -mindepth 1 -maxdepth 1 -type d | fzf)
+    cd $selected
+}
+
 source /opt/asdf-vm/asdf.sh
-. ~/.asdf/plugins/java/set-java-home.zsh
